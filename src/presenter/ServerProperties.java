@@ -27,7 +27,7 @@ public class ServerProperties implements Serializable{
 	static String IPaddress;
 	static String Searcher;
 	static int serverTimeout;
-	static int ThreadNumber; 
+	static int ThreadNumber;  
     Document docXML;
 	/**
 	 * 

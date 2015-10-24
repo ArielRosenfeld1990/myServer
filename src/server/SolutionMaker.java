@@ -29,7 +29,7 @@ public class SolutionMaker {
 
 	private static volatile SolutionMaker instance;
 	private ExecutorService threadPool;
-	private HashMap<Maze3d, Solution> mazesSolution;  
+	private HashMap<Maze3d, Solution> mazesSolution;   
 
 	private SolutionMaker() {
 		threadPool = Executors.newFixedThreadPool(Run.properties.getThreadNumber());//קונפיגורציה למספר התרדים

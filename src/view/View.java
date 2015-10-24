@@ -6,4 +6,4 @@ public interface View {
  void stop();
  String[] getUserCommand();
 }
-  
+   

@@ -41,7 +41,7 @@ public class MazeClientHandler implements ClientHandler {
 		}catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (ClassNotFoundException e) { 
+		} catch (ClassNotFoundException e) {  
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (Exception e) {

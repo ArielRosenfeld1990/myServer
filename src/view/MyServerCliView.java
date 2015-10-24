@@ -9,7 +9,7 @@ public class MyServerCliView extends Observable implements Observer, View {
 	public void start() {
 		ui = new ServerCLI(System.in, System.out);
 		ui.addObserver(this);
-		ui.start(); 
+		ui.start();  
 
 	}
 
