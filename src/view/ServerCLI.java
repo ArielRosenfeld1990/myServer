@@ -15,7 +15,7 @@ public class ServerCLI extends Observable{
 	private String[] splitedCommand;
 	Thread mainThread;
 	volatile boolean stop;
- 
+  
 	/**
 	 * constructor for CLI
 	 */

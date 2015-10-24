@@ -87,7 +87,7 @@ public class MyServer extends Observable{
 				mainThread.join();
 				server.close();
 			}
-		} catch (IOException e) {
+		} catch (IOException e) { 
 
 			e.printStackTrace();
 		} catch (InterruptedException e) {

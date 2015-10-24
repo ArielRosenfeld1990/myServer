@@ -258,7 +258,7 @@ public class ServerGuiWindow extends BasicWindow implements View {
 			}
 		});
 		PropertiesShell.setVisible(true);
-		PropertiesShell.addDisposeListener(new DisposeListener() {
+		PropertiesShell.addDisposeListener(new DisposeListener() { 
 			
 			@Override
 			public void widgetDisposed(DisposeEvent arg0) {

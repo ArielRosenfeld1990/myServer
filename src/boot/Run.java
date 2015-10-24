@@ -15,7 +15,7 @@ public class Run {
 		//MyServerCliView CliView=new MyServerCliView();
 		MyServer server = new MyServer(properties.getServerPort(),new MazeClientHandler(),properties.getNumOfClients());
 		Presenter p = new Presenter(ui, server);
-		ui.addObserver(p);
+		ui.addObserver(p); 
 		server.addObserver(p);
 		new Thread(ui).run();
 	}
