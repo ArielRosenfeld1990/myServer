@@ -25,6 +25,9 @@ public class ServerProperties implements Serializable{
 	static int numOfClients;
 	static int ServerPort;
 	static String IPaddress;
+	static String Searcher;
+	static int serverTimeout;
+	static int ThreadNumber;
     Document docXML;
 	/**
 	 * 
@@ -34,6 +37,9 @@ public class ServerProperties implements Serializable{
 		numOfClients=10;	
 		ServerPort=5400;
 		IPaddress="127.0.0.1";
+		Searcher="bfs";
+		serverTimeout=10*1000;
+		ThreadNumber=5;
 	}
 	
 	public ServerProperties(InputStream doc) throws FileNotFoundException{
@@ -62,6 +68,8 @@ public class ServerProperties implements Serializable{
 		try {
 			Integer num1 = numOfClients;
 			Integer num2 = ServerPort;
+			Integer num3 = serverTimeout;
+			Integer num4 = ThreadNumber;
 			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
 			Document doc = docBuilder.newDocument(); 
@@ -76,6 +84,15 @@ public class ServerProperties implements Serializable{
 			Element ServerIpAddress = doc.createElement("ServerIP");
 			ServerIpAddress.appendChild(doc.createTextNode(IPaddress));
 			Properties.appendChild(ServerIpAddress);
+			Element ServerSearcher = doc.createElement("ServerSeacher");
+			ServerSearcher.appendChild(doc.createTextNode(Searcher));
+			Properties.appendChild(ServerSearcher);
+			Element Timeout = doc.createElement("ServerTimeout");
+			Timeout.appendChild(doc.createTextNode(num3.toString()));
+			Properties.appendChild(Timeout);
+			Element ThreadNum = doc.createElement("ThreadNum");
+			ThreadNum.appendChild(doc.createTextNode(num4.toString()));
+			Properties.appendChild(ThreadNum);
 			TransformerFactory transformerFactory = TransformerFactory.newInstance();
 			Transformer transformer = transformerFactory.newTransformer();
 			DOMSource source = new DOMSource(doc);
@@ -109,6 +126,11 @@ public class ServerProperties implements Serializable{
 						String PortOfServer = eElement.getElementsByTagName("ServerPort").item(0).getTextContent();
 						ServerPort = Integer.parseInt(PortOfServer);
 						IPaddress = eElement.getElementsByTagName("ServerIP").item(0).getTextContent();
+						Searcher=eElement.getElementsByTagName("ServerSeacher").item(0).getTextContent();
+						String Timeout = eElement.getElementsByTagName("ServerTimeout").item(0).getTextContent();
+						serverTimeout=Integer.parseInt(Timeout);
+						String Threadnum = eElement.getElementsByTagName("ThreadNum").item(0).getTextContent();
+						ThreadNumber=Integer.parseInt(Threadnum);
 					}
 					System.out.println("file loaded successfully");
 				}
@@ -141,6 +163,30 @@ public class ServerProperties implements Serializable{
 
 	public static void setIPaddress(String iPaddress) {
 		IPaddress = iPaddress;
+	}
+
+	public static String getSearcher() {
+		return Searcher;
+	}
+
+	public static void setSearcher(String searcher) {
+		Searcher = searcher;
+	}
+
+	public static int getServerTimeout() {
+		return serverTimeout;
+	}
+
+	public static void setServerTimeout(int serverTimeout) {
+		ServerProperties.serverTimeout = serverTimeout;
+	}
+
+	public static int getThreadNumber() {
+		return ThreadNumber;
+	}
+
+	public static void setThreadNumber(int threadNumber) {
+		ThreadNumber = threadNumber;
 	}
 
 }

@@ -20,6 +20,8 @@ import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
+import boot.Run;
+
 
 
 public class ServerGuiWindow extends BasicWindow implements View {
@@ -38,6 +40,7 @@ public class ServerGuiWindow extends BasicWindow implements View {
 		shell.setLayout(new GridLayout(10, false));
 		shell.setText("Server GUI Window");
 		shell.setBackgroundMode(SWT.INHERIT_FORCE);
+		
 		InputStream imageStream;
 		try { 
 			imageStream = new BufferedInputStream(new FileInputStream("lib/dark_theme.jpg"));
@@ -51,7 +54,6 @@ public class ServerGuiWindow extends BasicWindow implements View {
 		Start=new Button(shell, SWT.PUSH);
 		Start.setText("Connect");
         Start.setEnabled(false);
-
 		Start.setLayoutData(new GridData(SWT.FILL, SWT.LEFT, false, false, 7, 1));
 		Start.addSelectionListener(new SelectionListener() {
 			
@@ -70,9 +72,11 @@ public class ServerGuiWindow extends BasicWindow implements View {
 				
 			}
 		});
+		
 		ClientStatus=new Text(shell, SWT.MULTI | SWT.BORDER);
 		ClientStatus.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true,3,3));
 		ClientStatus.setEnabled(false);
+		
 		SetProperties=new Button(shell,SWT.PUSH);
 		SetProperties.setText("Set Server Properties");
 		SetProperties.setLayoutData(new GridData(SWT.FILL, SWT.NONE, false, false,7, 1));
@@ -91,6 +95,7 @@ public class ServerGuiWindow extends BasicWindow implements View {
 				
 			}
 		});
+		
 		Exit=new Button(shell, SWT.PUSH);
 		Exit.setText("Exit");
 		Exit.setLayoutData(new GridData(SWT.FILL, SWT.NONE, false, false,7, 1));
@@ -109,12 +114,12 @@ public class ServerGuiWindow extends BasicWindow implements View {
 				
 			}
 		});
-       shell.addDisposeListener(new DisposeListener() {
+     
+		shell.addDisposeListener(new DisposeListener() {
 		
 		@Override
 		public void widgetDisposed(DisposeEvent arg0) {
 			inputStrings = new String[] { "exit" };
-
 			setChanged();
 			notifyObservers();
 			
@@ -165,6 +170,7 @@ public class ServerGuiWindow extends BasicWindow implements View {
 
 	}
 	@Override
+	
 	public void stop() {
 		shell.dispose();
 
@@ -174,7 +180,8 @@ public class ServerGuiWindow extends BasicWindow implements View {
 	public String[] getUserCommand() {
 		return inputStrings;
 	}
-   void PropertiesWindow(){
+   
+	void PropertiesWindow(){
 	    Shell PropertiesShell=new Shell(display, SWT.CLOSE | SWT.TITLE | SWT.MIN);
 	    PropertiesShell.setSize(200, 300);
 	    
@@ -236,7 +243,9 @@ public class ServerGuiWindow extends BasicWindow implements View {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
 				SetProperties.setEnabled(true);
-				inputStrings = new String[] { "saveToXML", "10", "127.0.0.1","5400",};
+				Integer Clientsnum=Run.properties.getNumOfClients();
+				Integer Portnum=Run.properties.getServerPort();
+				inputStrings = new String[] { "saveToXML",Clientsnum.toString() ,Run.properties.getIPaddress(),Portnum.toString(),};
 				setChanged();
 				notifyObservers();
 				PropertiesShell.close();

@@ -23,6 +23,7 @@ import algorithms.search.MazeAirDistance;
 import algorithms.search.MazeManhattanDistance;
 import algorithms.search.Searcher;
 import algorithms.search.Solution;
+import boot.Run;
 
 public class SolutionMaker {
 
@@ -31,7 +32,7 @@ public class SolutionMaker {
 	private HashMap<Maze3d, Solution> mazesSolution; 
 
 	private SolutionMaker() {
-		threadPool = Executors.newFixedThreadPool(5);//קונפיגורציה למספר התרדים
+		threadPool = Executors.newFixedThreadPool(Run.properties.getThreadNumber());//קונפיגורציה למספר התרדים
 
 		loadCache();
 	}
@@ -44,8 +45,7 @@ public class SolutionMaker {
 
 	public Solution Solve(Maze3d maze) throws Exception
 	{
-		
-		solveByMaze(maze, "bfs");//add configuration
+		solveByMaze(maze, Run.properties.getSearcher());//add configuration
 		Solution solution;
 		if((solution=mazesSolution.get(maze))!=null)
 		{
