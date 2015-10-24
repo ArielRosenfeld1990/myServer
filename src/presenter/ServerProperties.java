@@ -64,7 +64,7 @@ public class ServerProperties implements Serializable{
 			Integer num2 = ServerPort;
 			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
-			Document doc = docBuilder.newDocument();
+			Document doc = docBuilder.newDocument(); 
 			Element Properties = doc.createElement("ServerProperties");
 			doc.appendChild(Properties);
 			Element ClientsNumber = doc.createElement("NumberOfClients");

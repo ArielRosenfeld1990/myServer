@@ -76,7 +76,7 @@ public class MyServer extends Observable{
 					}catch (IOException e) {e.printStackTrace();}
 				}		
 			}
-		}).start();
+		}).start(); 
 		setChanged();
 		notifyObservers("server address: "+properties.getIPaddress()+"\n"+
 		                "server port is: "+properties.getServerPort()+"\n"

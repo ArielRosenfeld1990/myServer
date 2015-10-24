@@ -25,7 +25,7 @@ public class MyServerCliView extends Observable implements Observer, View {
 			setChanged();
 			notifyObservers();
 		}
-
+ 
 	}
 
 	@Override

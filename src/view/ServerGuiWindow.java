@@ -39,7 +39,7 @@ public class ServerGuiWindow extends BasicWindow implements View {
 		shell.setText("Server GUI Window");
 		shell.setBackgroundMode(SWT.INHERIT_FORCE);
 		InputStream imageStream;
-		try {
+		try { 
 			imageStream = new BufferedInputStream(new FileInputStream("lib/dark_theme.jpg"));
 			Image I= new Image(null, imageStream);
 			shell.setBackgroundImage(I);

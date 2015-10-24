@@ -27,7 +27,7 @@ public class Presenter implements Observer {
 				}
 			break;
 			case "exit":myServer.close();
-			            view.stop();
+			            view.stop(); 
 			break;
 			case "saveToXML":myServer.setXMLproperties(input);
 			break;
