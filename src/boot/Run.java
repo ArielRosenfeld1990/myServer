@@ -13,7 +13,7 @@ public class Run {
 	public static void main(String[] args) throws IOException {
 		ServerGuiWindow ui = new ServerGuiWindow("MyServerGUI", 600, 600);
 		//MyServerCliView CliView=new MyServerCliView();
-		MyServer server = new MyServer(properties.getServerPort(),new MazeClientHandler(),properties.getNumOfClients());
+		MyServer server = new MyServer(properties.getServerPort(),new MazeClientHandler(),properties.getNumOfClients(),properties.getServerTimeout());
 		Presenter p = new Presenter(ui, server);
 		ui.addObserver(p);  
 		server.addObserver(p);

@@ -1,6 +1,7 @@
 package server;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
@@ -8,7 +9,6 @@ import java.util.Observable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-
 import boot.Run;
 
 public class MyServer extends Observable{
@@ -17,15 +17,20 @@ public class MyServer extends Observable{
 	volatile boolean stop;
 	ClientHandler clientHandler;
 	int connectedClients;
+	int timeOut;
 	Thread mainThread;
+	int numOfClients;
 	final ExecutorService threadPool;
 
-	public MyServer(int port,ClientHandler clientHandler,int numOfClients) {
+	public MyServer(int port,ClientHandler clientHandler,int numOfClients,int timeOut) {
 		this.port=port;
 		this.clientHandler=clientHandler;
 		connectedClients=0;
 		threadPool = Executors.newFixedThreadPool(numOfClients);
 		server=null;
+		this.timeOut=timeOut;
+		this.numOfClients=numOfClients;
+		
 	}
 
 	public void start() throws IOException
@@ -33,8 +38,7 @@ public class MyServer extends Observable{
 		setChanged();
 		notifyObservers("Waiting for client connection please wait..."+'\n');
 		server=new ServerSocket(port);
-		server.setSoTimeout(Run.properties.getServerTimeout());//configurtion
-		 
+		server.setSoTimeout(timeOut);
 		mainThread =new Thread(new Runnable() {
 
 			@Override
@@ -60,7 +64,6 @@ public class MyServer extends Observable{
 											notifyObservers("client connected: "+someClient.getRemoteSocketAddress()+"\n");
 											clientHandler.handleClient(someClient.getInputStream(), someClient.getOutputStream());
 											someClient.close();
-											//צריך לדאוג שהכל ייסגר גם אם זה קורה באמצע
 
 										} catch (IOException e) {e.printStackTrace();}
 									}
@@ -73,9 +76,9 @@ public class MyServer extends Observable{
 		});
 		mainThread.start();
 		setChanged();
-		notifyObservers("server address: "+Run.properties.getIPaddress()+"\n"+
-				"server port is: "+Run.properties.getServerPort()+"\n"
-				+"number of clients to handle on the same time is: "+Run.properties.getNumOfClients()+"\n");
+		notifyObservers("server address: "+InetAddress.getLocalHost().getHostAddress()+ "\n"+
+				"server port is: "+server.getLocalPort()+"\n"
+				+"number of clients to handle on the same time is: "+numOfClients+"\n");
 	}
 
 	public void close() {
