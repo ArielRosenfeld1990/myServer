@@ -26,6 +26,9 @@ public class Presenter implements Observer {
 					view.display(e);
 				}
 			break;
+			case "disconnect": 
+				myServer.disconnect();
+				break;
 			case "exit":
 				view.stop();  
 				myServer.close();

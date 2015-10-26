@@ -12,6 +12,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -23,7 +24,7 @@ import algorithms.search.MazeAirDistance;
 import algorithms.search.MazeManhattanDistance;
 import algorithms.search.Searcher;
 import algorithms.search.Solution;
-import boot.Run;
+import presenter.ServerProperties;
 
 public class SolutionMaker {
 
@@ -32,12 +33,12 @@ public class SolutionMaker {
 	private HashMap<Maze3d, Solution> mazesSolution;   
 
 	private SolutionMaker() {
-		threadPool = Executors.newFixedThreadPool(Run.properties.getThreadNumber());//קונפיגורציה למספר התרדים
+		threadPool = Executors.newFixedThreadPool(ServerProperties.getInstance().getThreadNumber());//קונפיגורציה למספר התרדים
 
 		loadCache();
 	}
 
-	public static SolutionMaker getInstance() {//make it threadsafe
+	public synchronized static SolutionMaker getInstance() {
 		if(instance==null)
 			instance = new SolutionMaker();
 		return instance;
@@ -45,7 +46,7 @@ public class SolutionMaker {
 
 	public Solution Solve(Maze3d maze) throws Exception
 	{
-		solveByMaze(maze, Run.properties.getSearcher());//add configuration
+		solveByMaze(maze, ServerProperties.getInstance().getSearcher());//add configuration
 		Solution solution;
 		if((solution=mazesSolution.get(maze))!=null)
 		{
@@ -130,6 +131,18 @@ public class SolutionMaker {
 				try {inFromCache.close();} catch (IOException e) {e.printStackTrace();}
 		}
 	}
-
+ public synchronized void close(){
+	 threadPool.shutdown();
+	 instance=null;
+		 try {
+			while (!threadPool.awaitTermination(10,TimeUnit.SECONDS)){
+				 
+			 }
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	 
+ }
 
 }

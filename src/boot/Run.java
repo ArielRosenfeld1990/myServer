@@ -9,7 +9,7 @@ import server.MyServer;
 import view.ServerGuiWindow;
 
 public class Run {
-	public static ServerProperties properties=new ServerProperties();
+	public static ServerProperties properties=ServerProperties.getInstance();
 	public static void main(String[] args) throws IOException {
 		ServerGuiWindow ui = new ServerGuiWindow("MyServerGUI", 600, 600);
 		//MyServerCliView CliView=new MyServerCliView();

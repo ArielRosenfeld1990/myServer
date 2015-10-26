@@ -11,7 +11,6 @@ import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -20,13 +19,14 @@ import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-import boot.Run;
+import presenter.ServerProperties;
 
 
 
 public class ServerGuiWindow extends BasicWindow implements View {
 	String[] inputStrings;
 	Button Start;
+	Button Disconnect;
 	Button Exit;
 	Button SetProperties;
 	Text ClientStatus;
@@ -53,7 +53,6 @@ public class ServerGuiWindow extends BasicWindow implements View {
 
 		Start=new Button(shell, SWT.PUSH);
 		Start.setText("Connect");
-        Start.setEnabled(false);
 		Start.setLayoutData(new GridData(SWT.FILL, SWT.LEFT, false, false, 7, 1));
 		Start.addSelectionListener(new SelectionListener() {
 			
@@ -78,7 +77,7 @@ public class ServerGuiWindow extends BasicWindow implements View {
 		ClientStatus.setEnabled(false);
 		
 		SetProperties=new Button(shell,SWT.PUSH);
-		SetProperties.setText("Set Server Properties");
+		SetProperties.setText("Change Server Properties");
 		SetProperties.setLayoutData(new GridData(SWT.FILL, SWT.NONE, false, false,7, 1));
 		SetProperties.addSelectionListener(new SelectionListener() {
 			
@@ -95,7 +94,27 @@ public class ServerGuiWindow extends BasicWindow implements View {
 				
 			}
 		});
-		
+		Disconnect=new Button(shell, SWT.PUSH);
+		Disconnect.setText("Disconnect");
+		Disconnect.setEnabled(false);
+		Disconnect.setLayoutData(new GridData(SWT.FILL, SWT.NONE, false, false,7, 1));
+		Disconnect.addSelectionListener(new SelectionListener() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				Disconnect.setEnabled(false);
+				inputStrings = new String[] { "disconnect" };
+				setChanged();
+				notifyObservers();
+				
+			}
+			
+			@Override
+			public void widgetDefaultSelected(SelectionEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 		Exit=new Button(shell, SWT.PUSH);
 		Exit.setText("Exit");
 		Exit.setLayoutData(new GridData(SWT.FILL, SWT.NONE, false, false,7, 1));
@@ -143,25 +162,33 @@ public class ServerGuiWindow extends BasicWindow implements View {
 					case "String":
 						String message = (String) obj;
 						if (message.startsWith("Waiting for client connection")){
-							ClientStatus.append(message);
+							ClientStatus.append('\n'+message);
 							break;
 						}
 						if(message.startsWith("client connected")){
-							ClientStatus.append(message);
+							ClientStatus.append('\n'+message);
+
 							break;
 						}
 						if (message.startsWith("server address:")){
 							ClientStatus.append(message);
+							Disconnect.setEnabled(true);
+							Start.setEnabled(false);
+							SetProperties.setEnabled(false);
 							break;
 						}
 						MessageBox mBox = new MessageBox(shell, SWT.OK);
 						mBox.setMessage(message);
 						mBox.open();
 						if(message.equals("XML saved successfully")) {
-							Start.setEnabled(true);
 							break;
 						}
-
+                     if (message.startsWith("Client disconnected")){
+                    	 ClientStatus.setText(" ");
+							Start.setEnabled(true);
+							SetProperties.setEnabled(true);
+                    	 break;
+                     }
 
 			      }
 				}
@@ -200,12 +227,6 @@ public class ServerGuiWindow extends BasicWindow implements View {
 		Text ClientsNumberText=new Text(PropertiesShell,SWT.BORDER);
 		ClientsNumberText.setLayoutData(new GridData(SWT.FILL, SWT.None, false, false, 1, 1));
 		ClientsNumberText.setTextLimit(3);
-		Label IPaddressLabel=new Label(PropertiesShell, 1);
-		IPaddressLabel.setText("Enter the server IP address");
-		IPaddressLabel.setLayoutData(new GridData(SWT.FILL, SWT.None, false, false, 1, 1));
-		Text IPaddressText=new Text(PropertiesShell,SWT.BORDER);
-		IPaddressText.setLayoutData(new GridData(SWT.FILL, SWT.None, false, false, 1, 1));
-		IPaddressText.setTextLimit(15);
 		Button setProperties=new Button(PropertiesShell, SWT.PUSH);
 		setProperties.setText("set");
 		setProperties.setLayoutData(new GridData(SWT.LEFT, SWT.None, false, false, 1, 2));
@@ -213,8 +234,8 @@ public class ServerGuiWindow extends BasicWindow implements View {
 			
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
-				if (ClientsNumberText.getText()!=""&&IPaddressText.getText()!=""&&PortNumberText.getText()!=""){
-					inputStrings = new String[] { "saveToXML", ClientsNumberText.getText(), IPaddressText.getText(), PortNumberText.getText(),};
+				if (ClientsNumberText.getText()!=""&&PortNumberText.getText()!=""){
+					inputStrings = new String[] { "saveToXML", ClientsNumberText.getText(), PortNumberText.getText()};
 					setChanged();
 					notifyObservers();
 					PropertiesShell.close();
@@ -234,29 +255,7 @@ public class ServerGuiWindow extends BasicWindow implements View {
 				
 			}
 		});
-		Button setDefaultProperties=new Button(PropertiesShell, SWT.PUSH);
-		
-		setDefaultProperties.setText("Default Properties");
-		setDefaultProperties.setLayoutData(new GridData(SWT.LEFT, SWT.None, false, false, 1, 2));
-		setDefaultProperties.addSelectionListener(new SelectionListener() {
-			
-			@Override
-			public void widgetSelected(SelectionEvent arg0) {
-				SetProperties.setEnabled(true);
-				Integer Clientsnum=Run.properties.getNumOfClients();
-				Integer Portnum=Run.properties.getServerPort();
-				inputStrings = new String[] { "saveToXML",Clientsnum.toString() ,Run.properties.getIPaddress(),Portnum.toString(),};
-				setChanged();
-				notifyObservers();
-				PropertiesShell.close();
-			}
-			
-			@Override
-			public void widgetDefaultSelected(SelectionEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-		});
+
 		PropertiesShell.setVisible(true);
 		PropertiesShell.addDisposeListener(new DisposeListener() {  
 			

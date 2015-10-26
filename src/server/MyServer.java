@@ -9,7 +9,7 @@ import java.util.Observable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-import boot.Run;
+import presenter.ServerProperties;
 
 public class MyServer extends Observable{
 	int port;
@@ -20,14 +20,14 @@ public class MyServer extends Observable{
 	int timeOut;
 	Thread mainThread;
 	int numOfClients;
-	final ExecutorService threadPool;
+	ExecutorService threadPool;
 
 	public MyServer(int port,ClientHandler clientHandler,int numOfClients,int timeOut) {
 		this.port=port;
 		this.clientHandler=clientHandler;
 		connectedClients=0;
-		threadPool = Executors.newFixedThreadPool(numOfClients);
 		server=null;
+	//	threadPool = Executors.newFixedThreadPool(numOfClients);
 		this.timeOut=timeOut;
 		this.numOfClients=numOfClients;
 		
@@ -35,6 +35,7 @@ public class MyServer extends Observable{
 
 	public void start() throws IOException
 	{
+		threadPool = Executors.newFixedThreadPool(numOfClients);
 		setChanged();
 		notifyObservers("Waiting for client connection please wait..."+'\n');
 		server=new ServerSocket(port);
@@ -77,13 +78,19 @@ public class MyServer extends Observable{
 		mainThread.start();
 		setChanged();
 		notifyObservers("server address: "+InetAddress.getLocalHost().getHostAddress()+ "\n"+
-				"server port is: "+server.getLocalPort()+"\n"
+				"server port is: "+port+"\n"
 				+"number of clients to handle on the same time is: "+numOfClients+"\n");
 	}
-
+    public void disconnect(){
+    	close();
+    	stop=false;
+    	setChanged();
+    	notifyObservers("Client disconnected");
+    }
 	public void close() {
 		try {
 			stop=true;
+			SolutionMaker.getInstance().close();
 			threadPool.shutdown();
 			while (!threadPool.awaitTermination(10, TimeUnit.SECONDS));
 			if (server!=null){
@@ -100,20 +107,22 @@ public class MyServer extends Observable{
 	}
 	public void setXMLproperties(String[] args){
 		try{
+			ServerProperties properties = ServerProperties.getInstance();
 			int ClientNum=Integer.parseInt(args[1]);
-			int PortNum=Integer.parseInt(args[3]);
-			if ((ClientNum>0&&ClientNum<100)&&(PortNum>=1000&&PortNum<=9999)&&(args[2].equals("127.0.0.1")||args[2].equals("localhost"))) {
-				Run.properties.setNumOfClients(ClientNum); 
-				Run.properties.setServerPort(PortNum);
-				Run.properties.setIPaddress(args[2]);
-				Run.properties.saveToXML();
+			int PortNum=Integer.parseInt(args[2]);
+			if ((ClientNum>0&&ClientNum<100)&&(PortNum>=1000&&PortNum<=9999)) {
+				properties.setNumOfClients(ClientNum); 
+				properties.setServerPort(PortNum);
+				properties.saveToXML();
+				numOfClients=ClientNum;
+				port=PortNum;
 				setChanged();
 				notifyObservers("XML saved successfully");
 
 			}
 			else {
 				setChanged();
-				notifyObservers("bad field input,failed to set properties");
+				notifyObservers("bad fields input,failed to set properties");
 			}
 		} catch(Exception e) {
 			setChanged();

@@ -21,34 +21,42 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+
 public class ServerProperties implements Serializable{
-	static int numOfClients;
-	static int ServerPort;
-	static String IPaddress;
-	static String Searcher;
-	static int serverTimeout;
-	static int ThreadNumber;  
-    Document docXML;
+	private static volatile ServerProperties instance;
+	private  int numOfClients;
+	private  int ServerPort;
+	private  String IPaddress;
+	private  String Searcher;
+	private  int serverTimeout;
+	private  int ThreadNumber;  
+	private Document docXML;
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
-	public ServerProperties(){
-		numOfClients=10;	
-		ServerPort=5400;
-		IPaddress="127.0.0.1";
-		Searcher="bfs";
-		serverTimeout=10*1000;
-		ThreadNumber=5;
+	private final long serialVersionUID = 1L;
+	private ServerProperties(){
+		try {
+			loadFromXML();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
-	
+
+	public synchronized static ServerProperties getInstance() {
+		if(instance==null)
+			instance = new ServerProperties();
+		return instance;
+	}
+
 	public ServerProperties(InputStream doc) throws FileNotFoundException{
 		try {	
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-	    	DocumentBuilder dBuilder;
-	    	dBuilder = dbFactory.newDocumentBuilder();
+			DocumentBuilder dBuilder;
+			dBuilder = dbFactory.newDocumentBuilder();
 			docXML=dBuilder.parse(doc);
-			 loadFromXML();
+			loadFromXML();
 		}
 		catch (FileNotFoundException e){
 			throw new FileNotFoundException("Properties file wasnt found");
@@ -63,7 +71,7 @@ public class ServerProperties implements Serializable{
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void saveToXML() {
 		try {
 			Integer num1 = numOfClients;
@@ -110,30 +118,30 @@ public class ServerProperties implements Serializable{
 
 		try {
 			if (docXML==null) {
-			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-			DocumentBuilder dBuilder;
-			dBuilder = dbFactory.newDocumentBuilder();
-			docXML = dBuilder.parse("ServerProperties.xml");
+				DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+				DocumentBuilder dBuilder;
+				dBuilder = dbFactory.newDocumentBuilder();
+				docXML = dBuilder.parse("ServerProperties.xml");
 			}
-			
-				NodeList nList = docXML.getElementsByTagName("ServerProperties");
-				for (int temp = 0; temp < nList.getLength(); temp++) {
-					Node nNode = nList.item(temp);
-					if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-						Element eElement = (Element) nNode;
-						String ClientsNum = eElement.getElementsByTagName("NumberOfClients").item(0).getTextContent();
-						numOfClients=Integer.parseInt(ClientsNum);
-						String PortOfServer = eElement.getElementsByTagName("ServerPort").item(0).getTextContent();
-						ServerPort = Integer.parseInt(PortOfServer);
-						IPaddress = eElement.getElementsByTagName("ServerIP").item(0).getTextContent();
-						Searcher=eElement.getElementsByTagName("ServerSeacher").item(0).getTextContent();
-						String Timeout = eElement.getElementsByTagName("ServerTimeout").item(0).getTextContent();
-						serverTimeout=Integer.parseInt(Timeout);
-						String Threadnum = eElement.getElementsByTagName("ThreadNum").item(0).getTextContent();
-						ThreadNumber=Integer.parseInt(Threadnum);
-					}
-					System.out.println("file loaded successfully");
+
+			NodeList nList = docXML.getElementsByTagName("ServerProperties");
+			for (int temp = 0; temp < nList.getLength(); temp++) {
+				Node nNode = nList.item(temp);
+				if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+					Element eElement = (Element) nNode;
+					String ClientsNum = eElement.getElementsByTagName("NumberOfClients").item(0).getTextContent();
+					numOfClients=Integer.parseInt(ClientsNum);
+					String PortOfServer = eElement.getElementsByTagName("ServerPort").item(0).getTextContent();
+					ServerPort = Integer.parseInt(PortOfServer);
+					IPaddress = eElement.getElementsByTagName("ServerIP").item(0).getTextContent();
+					Searcher=eElement.getElementsByTagName("ServerSeacher").item(0).getTextContent();
+					String Timeout = eElement.getElementsByTagName("ServerTimeout").item(0).getTextContent();
+					serverTimeout=Integer.parseInt(Timeout);
+					String Threadnum = eElement.getElementsByTagName("ThreadNum").item(0).getTextContent();
+					ThreadNumber=Integer.parseInt(Threadnum);
 				}
+				System.out.println("file loaded successfully");
+			}
 		} catch (ParserConfigurationException | SAXException | IOException e) {
 			// TODO Auto-generated catch block 
 			throw new FileNotFoundException("Properties file wasnt found");
@@ -141,52 +149,52 @@ public class ServerProperties implements Serializable{
 
 	}
 
-	public static int getNumOfClients() {
+	public  int getNumOfClients() {
 		return numOfClients;
 	}
 
-	public static void setNumOfClients(int numOfClients) {
-		ServerProperties.numOfClients = numOfClients;
+	public void setNumOfClients(int numOfClients) {
+		this.numOfClients = numOfClients;
 	}
 
-	public static int getServerPort() {
+	public int getServerPort() {
 		return ServerPort;
 	}
 
-	public static void setServerPort(int serverPort) {
-		ServerPort = serverPort;
+	public void setServerPort(int serverPort) {
+		this.ServerPort = serverPort;
 	}
 
-	public static String getIPaddress() {
+	public String getIPaddress() {
 		return IPaddress;
 	}
 
-	public static void setIPaddress(String iPaddress) {
-		IPaddress = iPaddress;
+	public void setIPaddress(String iPaddress) {
+		this.IPaddress = iPaddress;
 	}
 
-	public static String getSearcher() {
+	public String getSearcher() {
 		return Searcher;
 	}
 
-	public static void setSearcher(String searcher) {
-		Searcher = searcher;
+	public void setSearcher(String searcher) {
+		this.Searcher = searcher;
 	}
 
-	public static int getServerTimeout() {
+	public int getServerTimeout() {
 		return serverTimeout;
 	}
 
-	public static void setServerTimeout(int serverTimeout) {
-		ServerProperties.serverTimeout = serverTimeout;
+	public void setServerTimeout(int serverTimeout) {
+		this.serverTimeout = serverTimeout;
 	}
 
-	public static int getThreadNumber() {
+	public int getThreadNumber() {
 		return ThreadNumber;
 	}
 
-	public static void setThreadNumber(int threadNumber) {
-		ThreadNumber = threadNumber;
+	public void setThreadNumber(int threadNumber) {
+		this.ThreadNumber = threadNumber;
 	}
 
 }
