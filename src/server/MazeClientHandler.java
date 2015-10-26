@@ -12,11 +12,13 @@ import algorithms.mazeGenerators.Maze3d;
 import algorithms.search.Solution;
 
 public class MazeClientHandler implements ClientHandler {
-	SolutionMaker solutionMaker;
+	
 	public MazeClientHandler() {
-		solutionMaker = SolutionMaker.getInstance();
+		
 	}
-
+    public void initializeClientHandler(){
+    	SolutionMaker.getInstance().initialize();
+ }
 	@Override
 	public void handleClient(InputStream inFromClient, OutputStream outToClient) {	
 		try {
@@ -28,7 +30,7 @@ public class MazeClientHandler implements ClientHandler {
 			String command = (String)problem.get(0);
 			if(command.equals("get solution")) {	
 				Maze3d maze = (Maze3d)problem.get(1);
-				Solution solution= solutionMaker.Solve(maze);
+				Solution solution= SolutionMaker.getInstance().Solve(maze);
 
 				objectOutputStream.writeObject(solution);
 				objectOutputStream.flush();

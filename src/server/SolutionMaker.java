@@ -33,11 +33,17 @@ public class SolutionMaker {
 	private HashMap<Maze3d, Solution> mazesSolution;   
 
 	private SolutionMaker() {
-		threadPool = Executors.newFixedThreadPool(ServerProperties.getInstance().getThreadNumber());//קונפיגורציה למספר התרדים
-
+		initialize();
 		loadCache();
 	}
+    public synchronized void initialize(){
+    	if (threadPool!=null){
+    		close();
+    	}
+		threadPool = Executors.newFixedThreadPool(ServerProperties.getInstance().getThreadNumber());//קונפיגורציה למספר התרדים
 
+		
+    }
 	public synchronized static SolutionMaker getInstance() {
 		if(instance==null)
 			instance = new SolutionMaker();
@@ -46,7 +52,7 @@ public class SolutionMaker {
 
 	public Solution Solve(Maze3d maze) throws Exception
 	{
-		solveByMaze(maze, ServerProperties.getInstance().getSearcher());//add configuration
+		solveByMaze(maze, ServerProperties.getInstance().getSearcher());
 		Solution solution;
 		if((solution=mazesSolution.get(maze))!=null)
 		{
@@ -133,7 +139,6 @@ public class SolutionMaker {
 	}
  public synchronized void close(){
 	 threadPool.shutdown();
-	 instance=null;
 		 try {
 			while (!threadPool.awaitTermination(10,TimeUnit.SECONDS)){
 				 
