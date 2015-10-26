@@ -36,6 +36,7 @@ public class MyServer extends Observable{
 	public void start() throws IOException
 	{
 		threadPool = Executors.newFixedThreadPool(numOfClients);
+		clientHandler.initialize();
 		setChanged();
 		notifyObservers("Waiting for client connection please wait..."+'\n');
 		server=new ServerSocket(port);
@@ -90,7 +91,7 @@ public class MyServer extends Observable{
 	public void close() {
 		try {
 			stop=true;
-			SolutionMaker.getInstance().close();
+			clientHandler.shutdown();
 			threadPool.shutdown();
 			while (!threadPool.awaitTermination(10, TimeUnit.SECONDS));
 			if (server!=null){

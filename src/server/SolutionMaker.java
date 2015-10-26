@@ -28,27 +28,14 @@ import presenter.ServerProperties;
 
 public class SolutionMaker {
 
-	private static volatile SolutionMaker instance;
 	private ExecutorService threadPool;
 	private HashMap<Maze3d, Solution> mazesSolution;   
 
-	private SolutionMaker() {
-		initialize();
+	public SolutionMaker() {
+		threadPool = Executors.newFixedThreadPool(ServerProperties.getInstance().getThreadNumber());
 		loadCache();
 	}
-    public synchronized void initialize(){
-    	if (threadPool!=null){
-    		close();
-    	}
-		threadPool = Executors.newFixedThreadPool(ServerProperties.getInstance().getThreadNumber());//קונפיגורציה למספר התרדים
 
-		
-    }
-	public synchronized static SolutionMaker getInstance() {
-		if(instance==null)
-			instance = new SolutionMaker();
-		return instance;
-	}
 
 	public Solution Solve(Maze3d maze) throws Exception
 	{
@@ -137,17 +124,17 @@ public class SolutionMaker {
 				try {inFromCache.close();} catch (IOException e) {e.printStackTrace();}
 		}
 	}
- public synchronized void close(){
-	 threadPool.shutdown();
-		 try {
+	public void close(){
+		threadPool.shutdown();
+
+		try {
 			while (!threadPool.awaitTermination(10,TimeUnit.SECONDS)){
-				 
-			 }
+
+			}
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	 
- }
+
+	}
 
 }
