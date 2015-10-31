@@ -19,8 +19,13 @@ import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-import presenter.ServerProperties;
-
+/**
+ * <h1>ServerGuiWindow</h1>
+ * ServerGuiWindow class is extending BasicWindow because this class is a 
+ * type of a BasicWindow, implementing View interface
+ * @author Ariel Rosenfeld and Ofir Calif
+ *
+ */
 
 
 public class ServerGuiWindow extends BasicWindow implements View {
@@ -30,10 +35,22 @@ public class ServerGuiWindow extends BasicWindow implements View {
 	Button Exit;
 	Button SetProperties;
 	Text ClientStatus;
+	/**
+	 * <h1>ServerGuiWindow constructor</h1>
+	 * ServerGuiWindow constructor initiliazing the BasicWindow constructor
+	 * @param title is the title for the window
+	 * @param width is the width of the window
+	 * @param height is the height of the window
+	 */
 	public ServerGuiWindow(String title, int width, int height) {
 		super(title, width, height);
 		
 	}
+	/**
+	 * <h1>initWidgets</h1>
+	 * initWidgets method is setting our shell and all our
+	 * widgets in the gui window
+	 */
 	@Override
 	void initWidgets() {
 		shell=new Shell(display, SWT.CLOSE | SWT.TITLE | SWT.MIN);
@@ -47,7 +64,6 @@ public class ServerGuiWindow extends BasicWindow implements View {
 			Image I= new Image(null, imageStream);
 			shell.setBackgroundImage(I);
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -145,12 +161,21 @@ public class ServerGuiWindow extends BasicWindow implements View {
 		}
 	});
 	}
+	/**
+	 * <h1>start</h1>
+	 * start method is overriding the start method in the View interface,
+	 * used for starting the interaction between the gui window and the client
+	 */
 	@Override
 	public void start() {
 		run();
 
 	}
-
+    /**
+     * <h1>display</h1>
+     * display method is overriding the display method in the View interface,
+     * used for displaying the proper results in the proper widgets
+     */
 	@Override
 	public void display(Object obj) {
 		display.asyncExec(new Runnable() {
@@ -197,17 +222,29 @@ public class ServerGuiWindow extends BasicWindow implements View {
 
 	}
 	@Override
-	
+	/**
+	 * <h1>stop</h1>
+	 * stop method is overriding the stop method in the View interface,
+	 * used for stopping the interaction between the gui window and the client
+	 */
 	public void stop() {
 		shell.dispose();
 
 	}
-
+    /**
+     * <h1>getUserCommand</h1>
+     * getUserCommand is overriding the getUserCommand in the View interface for getting
+     * the command from the client
+     */
 	@Override
 	public String[] getUserCommand() {
 		return inputStrings;
 	}
-   
+   /**
+    * <h1>PropertiesWindow</h1>
+    * PropertiesWindow method is used for configuring our PropertiesWindow,
+    * setting the shell and the widgets in this window
+    */
 	void PropertiesWindow(){
 	    Shell PropertiesShell=new Shell(display, SWT.CLOSE | SWT.TITLE | SWT.MIN);
 	    PropertiesShell.setSize(200, 300);
@@ -251,7 +288,7 @@ public class ServerGuiWindow extends BasicWindow implements View {
 			
 			@Override
 			public void widgetDefaultSelected(SelectionEvent arg0) {
-				// TODO Auto-generated method stub
+				
 				
 			}
 		});

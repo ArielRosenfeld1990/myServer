@@ -22,6 +22,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 
+@SuppressWarnings("serial")
 public class ServerProperties implements Serializable{
 	private static volatile ServerProperties instance;
 	private  int numOfClients;
@@ -32,9 +33,17 @@ public class ServerProperties implements Serializable{
 	private  int ThreadNumber;  
 	private Document docXML;
 	/**
-	 * 
+	 * <h1>ServerProperties</h1>
+	 * @author Ariel Rosenfeld and Ofir Calif
+	 * ServerProperties class contains all the static configuration settings that are
+	 * required to our server side
+	 *
 	 */
-	private final long serialVersionUID = 1L;
+	/**
+	 * <h1>ServerProperties constructor</h1>
+	 * our ServerProperties constructor is loading the configuration settings from the
+	 * XML file to the relevant data members
+	 */
 	private ServerProperties(){
 		try {
 			loadFromXML();
@@ -43,13 +52,23 @@ public class ServerProperties implements Serializable{
 			e.printStackTrace();
 		}
 	}
-
+/**
+ * <h1>getInstance</h1>
+ * getInstance is part of our singleton implementation.
+ * returns the instance of our class if it doesn't exsist it creats a new instance 
+ * @return instance is the instance for our class
+ */
 	public synchronized static ServerProperties getInstance() {
 		if(instance==null)
 			instance = new ServerProperties();
 		return instance;
 	}
-
+  /**
+   * <h1>ServerProperties constructor</h1>
+   * ServerProperties constructor is our non-default constructor
+   * @param doc is the given XML file
+   * @throws FileNotFoundException is thrown in case such a file wasn't found
+   */
 	public ServerProperties(InputStream doc) throws FileNotFoundException{
 		try {	
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -61,17 +80,21 @@ public class ServerProperties implements Serializable{
 		catch (FileNotFoundException e){
 			throw new FileNotFoundException("Properties file wasnt found");
 		} catch (ParserConfigurationException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		} catch (SAXException e) {
-			// TODO Auto-generated catch block
+		
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 	}
-
+/**
+ * <h1>saveToXML</h1>
+ * saveToXML method is for saving the ServerProperties data members into
+ * a XML file
+ */
 	public void saveToXML() {
 		try {
 			Integer num1 = numOfClients;
@@ -114,6 +137,12 @@ public class ServerProperties implements Serializable{
 		}
 
 	}
+	/**
+	 * <h1>loadFromXML</h1>
+	 * loadFromXML method is for loading settings from ServerProperties XML into
+	 * our class data members
+	 * @throws FileNotFoundException is thrown if such a XML wasn't found
+	 */
 	public void loadFromXML() throws FileNotFoundException {
 
 		try {
@@ -148,51 +177,99 @@ public class ServerProperties implements Serializable{
 		}
 
 	}
-
+/**
+ * <h1>getNumOfClients</h1>
+ * getNumOfClients is a getter for numOfClients data member
+ * @return numOfClients datamember
+ */
 	public  int getNumOfClients() {
 		return numOfClients;
 	}
-
+/**
+ * <h1>setNumOfClients</h1>
+ * setNumOfClients is a setter for numOfClients
+ * @param numOfClients is the value to change the datamember
+ */
 	public void setNumOfClients(int numOfClients) {
 		this.numOfClients = numOfClients;
 	}
-
+/**
+ * <h1>getServerPort</h1>
+ * getServerPort is a getter for the ServerPort
+ * @return ServerPort datamember
+ */
 	public int getServerPort() {
 		return ServerPort;
 	}
-
+/**
+ * <h1>setServerPort</h1>
+ * setServerPort is a setter for our ServerPort datamember
+ * @param serverPort is the value to put into the ServerPort member
+ */
 	public void setServerPort(int serverPort) {
 		this.ServerPort = serverPort;
 	}
-
+/**
+ * <h1>getIPaddress</h1>
+ * getIPaddress is a getter for the server IPaddress
+ * @return IPaddress datamember
+ */
 	public String getIPaddress() {
 		return IPaddress;
 	}
-
+/**
+ * <h1>setIPaddress</h1>
+ * setIPaddress is a setter for IPaddress datamember
+ * @param iPaddress is the given value for the IPaddress datamember
+ */
 	public void setIPaddress(String iPaddress) {
 		this.IPaddress = iPaddress;
 	}
-
+/**
+ * <h1>getSearcher</h1>
+ * getSeacher is our getter for the Searcher data member
+ * @return Searcher data member
+ */
 	public String getSearcher() {
 		return Searcher;
 	}
-
+/**
+ * <h1>setSearcher</h1>
+ * setSearcher is a setter for the searcher data member
+ * @param searcher is the value for the searcher data member
+ */
 	public void setSearcher(String searcher) {
 		this.Searcher = searcher;
 	}
-
+/**
+ * <h1>getServerTimeout</h1>
+ * getServerTimeout is a getter for our serverTimeout data member
+ * @return serverTimeout datamember
+ */
 	public int getServerTimeout() {
 		return serverTimeout;
 	}
-
+/**
+ * <h1>setServerTimeout</h1>
+ * setServerTimeout is a setter for our serverTimeout data member
+ * @param serverTimeout is the value for the serverTimeout datamember
+ */
 	public void setServerTimeout(int serverTimeout) {
 		this.serverTimeout = serverTimeout;
 	}
-
+/**
+ * <h1>getThreadNumber</h1>
+ * getThreadNumber is a getter for Threadnumber data member
+ * @return ThreadNumber data member
+ */
 	public int getThreadNumber() {
 		return ThreadNumber;
 	}
-
+/**
+ * <h1>setThreadNumber</h1>
+ * setThreadNumber is a setter for ThreadNumber data member
+ * @param threadNumber is the value for the ThreadNumber data member
+ */
 	public void setThreadNumber(int threadNumber) {
 		this.ThreadNumber = threadNumber;
 	}
