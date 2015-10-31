@@ -26,17 +26,33 @@ import algorithms.search.Searcher;
 import algorithms.search.Solution;
 import presenter.ServerProperties;
 
+/**
+ * <h1>class SolutionMaker</h1>
+ * this class responsible for creating solutions
+ * @author ofir calif and ariel rosenfeld
+ *
+ */
 public class SolutionMaker {
 
 	private ExecutorService threadPool;
 	private HashMap<Maze3d, Solution> mazesSolution;   
 
+	/**
+	 * <h1>SolutionMaker</h1>
+	 * the constructor initialize the threadpool and load solution cache
+	 */
 	public SolutionMaker() {
 		threadPool = Executors.newFixedThreadPool(ServerProperties.getInstance().getThreadNumber());
 		loadCache();
 	}
 
-
+/**
+ * <h1>solve method</h1>
+ * this method get a Maze3d maze, solve him and return his solution
+ * @param maze the maze to solve
+ * @return the solution for the given maze
+ * @throws Exception if it failed to create a solution
+ */
 	public Solution Solve(Maze3d maze) throws Exception
 	{
 		solveByMaze(maze, ServerProperties.getInstance().getSearcher());
@@ -46,9 +62,19 @@ public class SolutionMaker {
 			return solution;
 		}
 		else {
-			throw new Exception("faild to create solution");
+			throw new Exception("failed to create solution");
 		}
 	}
+
+	/**
+	 * <h1>solveByMaze method</h1>
+	 * this method creates a searcher for the given algorithm and use it to solve the given maze.
+	 * after his done, the method insert the solution to the hashMap and save the cache to a file
+	 * @param maze the maze to solve
+	 * @param algorithm the algorithm to solve by
+	 * @throws InterruptedException 
+	 * @throws ExecutionException
+	 */
 	private void solveByMaze(Maze3d maze,String algorithm) throws InterruptedException, ExecutionException {
 
 		if (mazesSolution.containsKey(maze)){
@@ -86,7 +112,9 @@ public class SolutionMaker {
 			}
 		});
 	}
+
 	/**
+	 * <h1>saveCache method</h1>
 	 * This method is used for saving our hashmap with the solutions to a Cache.zip file
 	 */
 	private void saveCache()
@@ -105,6 +133,7 @@ public class SolutionMaker {
 	}
 
 	/**
+	 * <h1>loadCache method</h1>
 	 * This method is used for loading our hashmap with the solutions from a Cache.zip file
 	 */
 	private void loadCache()
@@ -124,6 +153,11 @@ public class SolutionMaker {
 				try {inFromCache.close();} catch (IOException e) {e.printStackTrace();}
 		}
 	}
+
+	/**
+	 * <h1>close method</h1>
+	 * closes all working threads
+	 */
 	public void close(){
 		threadPool.shutdown();
 

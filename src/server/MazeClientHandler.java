@@ -11,18 +11,35 @@ import java.util.ArrayList;
 import algorithms.mazeGenerators.Maze3d;
 import algorithms.search.Solution;
 
+/**
+ * <h1>MazeClientHandler class</h1>
+ * this class implements the ClientHandler interface
+ * and responsible for the client-server conversation
+ * @author ofir calif and ariel rosenfeld
+ *
+ */
 public class MazeClientHandler implements ClientHandler {
-	SolutionMaker solutionMaker;
+	private SolutionMaker solutionMaker;
+	
+	/**
+	 * <h1>MazeClientHandler</h1>
+	 * constructor that initialize class dataMembers
+	 */
 	public MazeClientHandler() {
 		initialize();
 	}
 
+	/**
+	 * an override method of the HandleClient interface that create a specific conversation between the client to the server
+	 * expected to get an arrayList<object> that contains command and the proper objects for the command
+	 */
 	@Override
 	public void handleClient(InputStream inFromClient, OutputStream outToClient) {	
 		try {
 			ObjectOutputStream objectOutputStream = new ObjectOutputStream(outToClient);
 			ObjectInputStream objectInputStream=new ObjectInputStream(inFromClient);
 
+			@SuppressWarnings("unchecked")
 			ArrayList<Object> problem =(ArrayList<Object>)objectInputStream.readObject();
 
 			String command = (String)problem.get(0);
@@ -39,13 +56,10 @@ public class MazeClientHandler implements ClientHandler {
 				objectOutputStream.close();
 			}
 		}catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {  
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

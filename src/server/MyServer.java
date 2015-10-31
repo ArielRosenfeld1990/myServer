@@ -11,28 +11,47 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import presenter.ServerProperties;
 
+/**
+ * <h1>MyServer class</h1>
+ * this class is the main server,
+ * the server responsable of the the server behivor and for remote client connection
+ * this server is the model in our mvp design
+ * @author ofir calif and ariel rosenfeld
+ *
+ */
 public class MyServer extends Observable{
-	int port;
-	ServerSocket server;
-	volatile boolean stop;
-	ClientHandler clientHandler;
-	int connectedClients;
-	int timeOut;
-	Thread mainThread;
-	int numOfClients;
-	ExecutorService threadPool;
+	
+	private ServerSocket server;
+	private ClientHandler clientHandler;
+	private volatile boolean stop;
+	private int timeOut;
+	private int port;
+	private int numOfClients;
+	private Thread mainThread;
+	private ExecutorService threadPool;
 
+	/**	
+	 * <h1>MyServer constructor</h1>
+	 * the constructor of SyServer,
+	 * initialize server properties
+	 * @param port the port that the server is listening to
+	 * @param clientHandler the clientHandler that handle the clients
+	 * @param numOfClients the max parllel clients connection
+	 * @param timeOut timeout for client connections
+	 */
 	public MyServer(int port,ClientHandler clientHandler,int numOfClients,int timeOut) {
 		this.port=port;
 		this.clientHandler=clientHandler;
-		connectedClients=0;
 		server=null;
-	//	threadPool = Executors.newFixedThreadPool(numOfClients);
 		this.timeOut=timeOut;
 		this.numOfClients=numOfClients;
-		
 	}
 
+	/**
+	 * <h1>start method</h1>
+	 * this method start the server
+	 * @throws IOException in case of failure of starting the server
+	 */
 	public void start() throws IOException
 	{
 		threadPool = Executors.newFixedThreadPool(numOfClients);
@@ -52,7 +71,6 @@ public class MyServer extends Observable{
 
 						try{if (server.isClosed()==false){
 							someClient= server.accept();
-							connectedClients++;
 
 							if(someClient!=null){
 								threadPool.execute(new Runnable() {
@@ -82,12 +100,22 @@ public class MyServer extends Observable{
 				"server port is: "+port+"\n"
 				+"number of clients to handle on the same time is: "+numOfClients+"\n");
 	}
-    public void disconnect(){
+   
+	/**
+	 * <h1>disconnect method</h1>
+	 * this method close the server and initialize the stop flag for restarting the server 
+	 */
+	public void disconnect(){
     	close();
     	stop=false;
     	setChanged();
     	notifyObservers("Client disconnected");
     }
+	
+	/**
+	 * <h1>close method</h1>
+	 * this method closes the server
+	 */
 	public void close() {
 		try {
 			stop=true;
@@ -102,10 +130,15 @@ public class MyServer extends Observable{
 
 			e.printStackTrace();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
+
+	/**
+	 * <h1>setXMLproperties method</h1>
+	 *  this method get args that represent the server properties and apply them to the server
+	 * @param args
+	 */
 	public void setXMLproperties(String[] args){
 		try{
 			ServerProperties properties = ServerProperties.getInstance();
@@ -129,10 +162,5 @@ public class MyServer extends Observable{
 			setChanged();
 			notifyObservers("failed to set properties");
 		}
-
-
 	}
-
-
-
 }
