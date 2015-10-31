@@ -20,7 +20,7 @@ import presenter.ServerProperties;
  *
  */
 public class MyServer extends Observable{
-	
+
 	private ServerSocket server;
 	private ClientHandler clientHandler;
 	private volatile boolean stop;
@@ -100,18 +100,18 @@ public class MyServer extends Observable{
 				"server port is: "+port+"\n"
 				+"number of clients to handle on the same time is: "+numOfClients+"\n");
 	}
-   
+
 	/**
 	 * <h1>disconnect method</h1>
 	 * this method close the server and initialize the stop flag for restarting the server 
 	 */
 	public void disconnect(){
-    	close();
-    	stop=false;
-    	setChanged();
-    	notifyObservers("Client disconnected");
-    }
-	
+		close();
+		stop=false;
+		setChanged();
+		notifyObservers("Client disconnected");
+	}
+
 	/**
 	 * <h1>close method</h1>
 	 * this method closes the server
@@ -119,9 +119,13 @@ public class MyServer extends Observable{
 	public void close() {
 		try {
 			stop=true;
-			clientHandler.shutdown();
-			threadPool.shutdown();
-			while (!threadPool.awaitTermination(10, TimeUnit.SECONDS));
+			if(clientHandler!=null)
+				clientHandler.shutdown();
+			if(threadPool!=null)
+			{
+				threadPool.shutdown();
+				while (!threadPool.awaitTermination(10, TimeUnit.SECONDS));
+			}
 			if (server!=null){
 				mainThread.join();
 				server.close();
@@ -144,12 +148,17 @@ public class MyServer extends Observable{
 			ServerProperties properties = ServerProperties.getInstance();
 			int ClientNum=Integer.parseInt(args[1]);
 			int PortNum=Integer.parseInt(args[2]);
+			int serverTimeout=Integer.parseInt(args[3]);
+			String searcher = args[4];
 			if ((ClientNum>0&&ClientNum<100)&&(PortNum>=1000&&PortNum<=9999)) {
 				properties.setNumOfClients(ClientNum); 
 				properties.setServerPort(PortNum);
+				properties.setServerTimeout(serverTimeout);
+				properties.setSearcher(searcher);
 				properties.saveToXML();
 				numOfClients=ClientNum;
 				port=PortNum;
+				timeOut=serverTimeout;
 				setChanged();
 				notifyObservers("XML saved successfully");
 

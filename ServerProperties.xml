@@ -1,1 +1,1 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><ServerProperties><NumberOfClients>10</NumberOfClients><ServerPort>5400</ServerPort><ServerIP>127.0.0.1</ServerIP><ServerSeacher>bfs</ServerSeacher><ServerTimeout>10000</ServerTimeout><ThreadNum>5</ThreadNum></ServerProperties>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><ServerProperties><NumberOfClients>10</NumberOfClients><ServerPort>5400</ServerPort><ServerSeacher>bfs</ServerSeacher><ServerTimeout>1000</ServerTimeout><ThreadNum>5</ThreadNum></ServerProperties>

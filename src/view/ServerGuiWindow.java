@@ -264,6 +264,18 @@ public class ServerGuiWindow extends BasicWindow implements View {
 		Text ClientsNumberText=new Text(PropertiesShell,SWT.BORDER);
 		ClientsNumberText.setLayoutData(new GridData(SWT.FILL, SWT.None, false, false, 1, 1));
 		ClientsNumberText.setTextLimit(3);
+		Label timeoutLabel=new Label(PropertiesShell, 1);
+		timeoutLabel.setText("Enter server timeout");
+		timeoutLabel.setLayoutData(new GridData(SWT.FILL, SWT.None, false, false, 1, 1));
+		Text timeoutText=new Text(PropertiesShell,SWT.BORDER);
+		timeoutText.setLayoutData(new GridData(SWT.FILL, SWT.None, false, false, 1, 1));
+		timeoutText.setTextLimit(5);
+		Label searcherLabel=new Label(PropertiesShell, 1);
+		searcherLabel.setText("Enter Searcher");
+		searcherLabel.setLayoutData(new GridData(SWT.FILL, SWT.None, false, false, 1, 1));
+		Text searcherText=new Text(PropertiesShell,SWT.BORDER);
+		searcherText.setLayoutData(new GridData(SWT.FILL, SWT.None, false, false, 1, 1));
+		searcherText.setTextLimit(3);
 		Button setProperties=new Button(PropertiesShell, SWT.PUSH);
 		setProperties.setText("set");
 		setProperties.setLayoutData(new GridData(SWT.LEFT, SWT.None, false, false, 1, 2));
@@ -272,7 +284,7 @@ public class ServerGuiWindow extends BasicWindow implements View {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
 				if (ClientsNumberText.getText()!=""&&PortNumberText.getText()!=""){
-					inputStrings = new String[] { "saveToXML", ClientsNumberText.getText(), PortNumberText.getText()};
+					inputStrings = new String[] { "saveToXML", ClientsNumberText.getText(), PortNumberText.getText(),timeoutText.getText(),searcherText.getText()};
 					setChanged();
 					notifyObservers();
 					PropertiesShell.close();

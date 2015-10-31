@@ -27,7 +27,6 @@ public class ServerProperties implements Serializable{
 	private static volatile ServerProperties instance;
 	private  int numOfClients;
 	private  int ServerPort;
-	private  String IPaddress;
 	private  String Searcher;
 	private  int serverTimeout;
 	private  int ThreadNumber;  
@@ -112,9 +111,6 @@ public class ServerProperties implements Serializable{
 			Element PortOfServer = doc.createElement("ServerPort");
 			PortOfServer.appendChild(doc.createTextNode(num2.toString()));
 			Properties.appendChild(PortOfServer);
-			Element ServerIpAddress = doc.createElement("ServerIP");
-			ServerIpAddress.appendChild(doc.createTextNode(IPaddress));
-			Properties.appendChild(ServerIpAddress);
 			Element ServerSearcher = doc.createElement("ServerSeacher");
 			ServerSearcher.appendChild(doc.createTextNode(Searcher));
 			Properties.appendChild(ServerSearcher);
@@ -162,7 +158,6 @@ public class ServerProperties implements Serializable{
 					numOfClients=Integer.parseInt(ClientsNum);
 					String PortOfServer = eElement.getElementsByTagName("ServerPort").item(0).getTextContent();
 					ServerPort = Integer.parseInt(PortOfServer);
-					IPaddress = eElement.getElementsByTagName("ServerIP").item(0).getTextContent();
 					Searcher=eElement.getElementsByTagName("ServerSeacher").item(0).getTextContent();
 					String Timeout = eElement.getElementsByTagName("ServerTimeout").item(0).getTextContent();
 					serverTimeout=Integer.parseInt(Timeout);
@@ -172,7 +167,6 @@ public class ServerProperties implements Serializable{
 				System.out.println("file loaded successfully");
 			}
 		} catch (ParserConfigurationException | SAXException | IOException e) {
-			// TODO Auto-generated catch block 
 			throw new FileNotFoundException("Properties file wasnt found");
 		}
 
@@ -209,22 +203,7 @@ public class ServerProperties implements Serializable{
 	public void setServerPort(int serverPort) {
 		this.ServerPort = serverPort;
 	}
-/**
- * <h1>getIPaddress</h1>
- * getIPaddress is a getter for the server IPaddress
- * @return IPaddress datamember
- */
-	public String getIPaddress() {
-		return IPaddress;
-	}
-/**
- * <h1>setIPaddress</h1>
- * setIPaddress is a setter for IPaddress datamember
- * @param iPaddress is the given value for the IPaddress datamember
- */
-	public void setIPaddress(String iPaddress) {
-		this.IPaddress = iPaddress;
-	}
+
 /**
  * <h1>getSearcher</h1>
  * getSeacher is our getter for the Searcher data member
