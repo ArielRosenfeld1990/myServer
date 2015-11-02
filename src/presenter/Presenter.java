@@ -54,7 +54,7 @@ public class Presenter implements Observer {
 				view.stop();  
 				myServer.close();
 			break;
-			case "saveToXML":myServer.setXMLproperties(input);
+			case "saveToXML":myServer.setProperties(input);
 			break;
 			default:
 				view.display("not a valid command");

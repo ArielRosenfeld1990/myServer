@@ -143,7 +143,7 @@ public class MyServer extends Observable{
 	 *  this method get args that represent the server properties and apply them to the server
 	 * @param args
 	 */
-	public void setXMLproperties(String[] args){
+	public void setProperties(String[] args){
 		try{
 			ServerProperties properties = ServerProperties.getInstance();
 			int ClientNum=Integer.parseInt(args[1]);
