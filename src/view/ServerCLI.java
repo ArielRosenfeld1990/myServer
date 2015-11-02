@@ -66,8 +66,7 @@ public class ServerCLI extends Observable{
 	/**
 	 * <h1>display</h1>
 	 * display method is for displaying the result in the CLI
-	 * @param obj is the object that we got.
-	 * @param displayer is the kind of displayer we need to show in the CLI.
+	 * @param params is the object that we got.
 	 */
 	public void display(String params) {
 		out.println(params);
@@ -86,6 +85,7 @@ public class ServerCLI extends Observable{
 	/**
 	 * <h1>getUserCommand</h1>
 	 * getUserCommand method is used to get the user command
+	 * @return the user command
 	 */
 
 	public String[] getUserCommand() {

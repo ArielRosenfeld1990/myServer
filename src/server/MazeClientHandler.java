@@ -31,7 +31,7 @@ public class MazeClientHandler implements ClientHandler {
 
 	/**
 	 * an override method of the HandleClient interface that create a specific conversation between the client to the server
-	 * expected to get an arrayList<object> that contains command and the proper objects for the command
+	 * expected to get an arrayList of object that contains command and the proper objects for the command
 	 */
 	@Override
 	public void handleClient(InputStream inFromClient, OutputStream outToClient) {	

@@ -141,7 +141,7 @@ public class MyServer extends Observable{
 	/**
 	 * <h1>setXMLproperties method</h1>
 	 *  this method get args that represent the server properties and apply them to the server
-	 * @param args
+	 * @param args the properties to set
 	 */
 	public void setProperties(String[] args){
 		try{

@@ -72,8 +72,8 @@ public class SolutionMaker {
 	 * after his done, the method insert the solution to the hashMap and save the cache to a file
 	 * @param maze the maze to solve
 	 * @param algorithm the algorithm to solve by
-	 * @throws InterruptedException 
-	 * @throws ExecutionException
+	 * @throws InterruptedException throws if there the thread was interrupted
+	 * @throws ExecutionException throws if the thread was failed to execute
 	 */
 	private void solveByMaze(Maze3d maze,String algorithm) throws InterruptedException, ExecutionException {
 
