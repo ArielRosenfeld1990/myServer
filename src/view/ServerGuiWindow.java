@@ -60,7 +60,7 @@ public class ServerGuiWindow extends BasicWindow implements View {
 		
 		InputStream imageStream;
 		try { 
-			imageStream = new BufferedInputStream(new FileInputStream("lib/dark_theme.jpg"));
+			imageStream = new BufferedInputStream(new FileInputStream("resources/dark_theme.jpg"));
 			Image I= new Image(null, imageStream);
 			shell.setBackgroundImage(I);
 		} catch (FileNotFoundException e) {
